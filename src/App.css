@@ -1,38 +1,113 @@
-.App {
-  text-align: center;
+/* App.css — Updated for Top Nav Layout */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.app-container {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0975a7;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* space between logo and text */
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.app-logo {
+  width: 40px;
+  height: 40px;
+}
+
+
+.profile-card {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+}
+
+.profile-image-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #4CAF50;
+}
+
+.profile-name {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f1f1f1;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dropdown-content button {
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: center;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background-color: #ddd;
+}
+
+/* Show dropdown on hover */
+.profile-image-wrapper:hover .dropdown-content,
+.dropdown-content:hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.app-main {
+  flex: 1;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  padding: 2rem;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.message {
+  text-align: center;
 }

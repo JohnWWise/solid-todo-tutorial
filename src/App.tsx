@@ -1,3 +1,5 @@
+import './App.css';
+import { ReactComponent as Logo } from './assets/solidbase_logo.svg';
 import React, { useState, useEffect } from "react";
 import {
   LoginButton,
@@ -11,7 +13,7 @@ import {
 } from "@inrupt/solid-client";
 
 const authOptions = {
-  clientName: "Solid Todo App",
+  clientName: "Solid Base",
 };
 
 function App() {
@@ -22,7 +24,8 @@ function App() {
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
   const [tempPodUrl, setTempPodUrl] = useState<string>("");
 
-  // 🚩 1. Load saved Pod URL from localStorage if available
+
+  // 1. Load saved Pod URL from localStorage if available
   useEffect(() => {
     const savedPodUrl = localStorage.getItem("podUrl");
     if (savedPodUrl) {
@@ -30,7 +33,7 @@ function App() {
     }
   }, []);
 
-  // 🚩 2. Fetch WebID profile and related info after login
+  // 2. Fetch WebID profile and related info after login
   useEffect(() => {
     async function fetchWebIdProfile() {
       if (!session.info.isLoggedIn || !session.info.webId) return;
@@ -66,11 +69,6 @@ function App() {
           setPodUrl(storage);
           localStorage.setItem("podUrl", storage);
           console.log("Pod Storage URL:", storage);
-        }
-
-        const registrySetUrl = getUrl(webIdThing, "http://www.w3.org/ns/solid/interop#hasRegistrySet");
-        if (registrySetUrl) {
-            console.log("Registry Set URL:", registrySetUrl);
         }
 
 
@@ -140,45 +138,36 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      {session.info.isLoggedIn ? (
-        <>
-          {podUrl ? (
-            <div className="message logged-in">
-              <span>You are logged in as: {profileName || session.info.webId}</span>
-              <br />
-              {profileImgUrl && (
-                <img
-                  src={profileImgUrl}
-                  alt="Profile"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    marginTop: "1rem"
-                  }}
-                />
-              )}
-              <br />
+  <div className="app-container">
+    <header className="app-header">
+      <div className="app-title">
+        <Logo className="app-logo" />
+        Solid Base
+      </div>
+      {session.info.isLoggedIn && podUrl && (
+        <div className="profile-card">
+          <div className="profile-image-wrapper">
+            {profileImgUrl && (
+              <img
+                src={profileImgUrl}
+                alt="Profile"
+                className="profile-image"
+              />
+            )}
+            <div className="dropdown-content">
               <button onClick={handleLogout}>Logout</button>
             </div>
-          ) : (
-            <form onSubmit={handlePodUrlSubmit}>
-              <label>
-                Enter your Pod base URL (e.g., https://storage.inrupt.com/your-id/):
-                <input
-                  type="url"
-                  value={tempPodUrl}
-                  onChange={(e) => setTempPodUrl(e.target.value)}
-                  required
-                />
-              </label>
-              <button type="submit">Save Pod URL</button>
-            </form>
-          )}
-        </>
-      ) : (
+          </div>
+          <div className="profile-name">
+            <span>{profileName || session.info.webId}</span>
+          </div>
+        </div>
+      )}
+    </header>
+
+    {/* Main App Content */}
+    <main className="app-main">
+      {!session.info.isLoggedIn ? (
         <div className="message">
           <span>You are not logged in.</span>
           <LoginButton
@@ -187,9 +176,25 @@ function App() {
             authOptions={authOptions}
           />
         </div>
+      ) : (
+        !podUrl && (
+          <form onSubmit={handlePodUrlSubmit}>
+            <label>
+              Enter your Pod base URL (e.g., https://storage.inrupt.com/your-id/):
+              <input
+                type="url"
+                value={tempPodUrl}
+                onChange={(e) => setTempPodUrl(e.target.value)}
+                required
+              />
+            </label>
+            <button type="submit">Save Pod URL</button>
+          </form>
+        )
       )}
-    </div>
-  );
+    </main>
+  </div>
+);
 }
 
 export default App;
