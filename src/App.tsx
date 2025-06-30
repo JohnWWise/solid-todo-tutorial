@@ -11,6 +11,7 @@ import {
   getStringNoLocale, 
   getUrl 
 } from "@inrupt/solid-client";
+import AddTodo from "./components/AddTodo";
 
 const authOptions = {
   clientName: "Solid Base",
@@ -167,32 +168,34 @@ function App() {
 
     {/* Main App Content */}
     <main className="app-main">
-      {!session.info.isLoggedIn ? (
-        <div className="message">
-          <span>You are not logged in.</span>
-          <LoginButton
-            oidcIssuer="https://login.inrupt.com"
-            redirectUrl={window.location.href}
-            authOptions={authOptions}
-          />
-        </div>
-      ) : (
-        !podUrl && (
-          <form onSubmit={handlePodUrlSubmit}>
-            <label>
-              Enter your Pod base URL (e.g., https://storage.inrupt.com/your-id/):
-              <input
-                type="url"
-                value={tempPodUrl}
-                onChange={(e) => setTempPodUrl(e.target.value)}
-                required
-              />
-            </label>
-            <button type="submit">Save Pod URL</button>
-          </form>
-        )
-      )}
-    </main>
+  {!session.info.isLoggedIn ? (
+    <div className="message">
+      <span>You are not logged in.</span>
+      <LoginButton
+        oidcIssuer="https://login.inrupt.com"
+        redirectUrl={window.location.href}
+        authOptions={authOptions}
+      />
+    </div>
+  ) : !podUrl ? (
+    <form onSubmit={handlePodUrlSubmit}>
+      <label>
+        Enter your Pod base URL (e.g., https://storage.inrupt.com/your-id/):
+        <input
+          type="url"
+          value={tempPodUrl}
+          onChange={(e) => setTempPodUrl(e.target.value)}
+          required
+        />
+      </label>
+      <button type="submit">Save Pod URL</button>
+    </form>
+  ) : (
+    <>
+      <AddTodo podUrl={podUrl} />
+    </>
+  )}
+</main>
   </div>
 );
 }
